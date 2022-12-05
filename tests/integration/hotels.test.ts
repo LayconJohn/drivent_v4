@@ -1,18 +1,14 @@
 import app, { init } from "@/app";
-import { prisma } from "@/config";
 import faker from "@faker-js/faker";
 import { TicketStatus } from "@prisma/client";
-import e from "express";
 import httpStatus from "http-status";
 import * as jwt from "jsonwebtoken";
 import supertest from "supertest";
 import {
   createEnrollmentWithAddress,
   createUser,
-  createTicketType,
   createTicket,
   createPayment,
-  generateCreditCardData,
   createTicketTypeWithHotel,
   createTicketTypeRemote,
   createHotel,
@@ -46,7 +42,7 @@ describe("GET /hotels", () => {
   });
 
   it("should respond with status 401 if there is no session for given token", async () => {
-    const userWithoutSession = await createUser();
+    const userWithoutSession = await createUser(); 
     const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
 
     const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
@@ -67,7 +63,7 @@ describe("GET /hotels", () => {
       const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.PAYMENT_REQUIRED);
-    });
+    }); 
 
     it("should respond with status 404 when user has no enrollment ", async () => {
       const user = await createUser();
@@ -95,7 +91,7 @@ describe("GET /hotels", () => {
       expect(response.status).toEqual(httpStatus.OK);
 
       expect(response.body).toEqual([
-        {
+        { 
           id: createdHotel.id,
           name: createdHotel.name,
           image: createdHotel.image,
